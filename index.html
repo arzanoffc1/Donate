@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pembayaran</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="mainContent" style="display: block;">
+  <h1>Setelah melakukan TF silahkan kan klik tombol (next) </h1>
+
+  <div>
+    <img src="qris.jpg" alt="QRIS" class="qris-img" id="qrisImage" />
+  </div>
+
+  <div class="payment-buttons" id="paymentButtons">
+    <button class="main-button" data-target="ewallet">E-Wallet</button>
+    <button class="main-button" data-target="bank">Bank</button>
+  </div>
+
+  <div class="buttons-container" id="ewallet">
+    <button class="copy-button" data-copy="0882006540998">
+      <div class="text-group">
+        <span class="label">DANA</span>
+        <span class="value">0882006540998</span>
+      </div>
+      <svg class="copy-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+    </button>
+
+    <button class="copy-button" data-copy="0882006540998">
+      <div class="text-group">
+        <span class="label">GOPAY</span>
+        <span class="value">0882006540998</span>
+      </div>
+      <svg class="copy-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+    </button>
+  </div>
+
+  <div class="buttons-container" id="bank">
+    <button class="copy-button" data-copy="1234567890">
+      <div class="text-group">
+        <span class="label">Seabank</span>
+        <span class="value">901298121492</span>
+      </div>
+      <svg class="copy-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+    </button>
+  </div>
+
+  <!-- Tambahkan tombol NEXT di sini -->
+<div style="margin-top: 30px; text-align: center;">
+  <a href="https://wa.me/6285601672998?text=LAMPIRKAN%20FOTO%20BUKTI%20TRANFER%20NYA%0APRODUK%20YG%20DI%20BELI%20%3A%20(WAJIB%20DI%20ISI)" target="_blank">
+    <button class="main-button" id="nextButton">Next</button>
+  </a>
+</div>
+</div>
+<script>
+  // Toggle payment methods
+  const buttons = document.querySelectorAll('.main-button');
+  let activeSection = null;
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const target = button.getAttribute('data-target');
+      const container = document.getElementById(target);
+
+      if (activeSection === target) {
+        container.style.display = 'none';
+        container.querySelectorAll('.copy-button').forEach(btn => btn.classList.remove('show'));
+        activeSection = null;
+      } else {
+        if (activeSection) {
+          const activeContainer = document.getElementById(activeSection);
+          activeContainer.style.display = 'none';
+          activeContainer.querySelectorAll('.copy-button').forEach(btn => btn.classList.remove('show'));
+        }
+        container.style.display = 'flex';
+
+        const copyButtons = Array.from(container.querySelectorAll('.copy-button'));
+        copyButtons.forEach((btn, i) => {
+          setTimeout(() => btn.classList.add('show'), i * 150);
+        });
+
+        activeSection = target;
+      }
+    });
+  });
+
+  // Copy to clipboard function
+  document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', () => {
+      const textToCopy = button.getAttribute('data-copy');
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        button.innerHTML = '<div style="flex-grow:1;text-align:center;">Disalin!</div>';
+        setTimeout(() => location.reload(), 1000);
+      });
+    });
+  });
+
+  // QRIS zoom effect
+  const qris = document.getElementById("qrisImage");
+  const paymentButtons = document.getElementById("paymentButtons");
+
+  qris.addEventListener("click", () => {
+    qris.classList.toggle("enlarged");
+    paymentButtons.classList.toggle("shift-down");
+  });
+
+  // Button press effect
+  document.querySelectorAll('.main-button').forEach(button => {
+    // Mouse events
+    button.addEventListener('mousedown', () => {
+      button.classList.add('clicked');
+    });
+    
+    button.addEventListener('mouseup', () => {
+      button.classList.remove('clicked');
+    });
+    
+    button.addEventListener('mouseleave', () => {
+      button.classList.remove('clicked');
+    });
+    
+    // Touch events for mobile
+    button.addEventListener('touchstart', () => {
+      button.classList.add('clicked');
+    });
+    
+    button.addEventListener('touchend', () => {
+      button.classList.remove('clicked');
+    });
+  });
+</script>
+
+</body>
+</html>
